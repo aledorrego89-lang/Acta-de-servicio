@@ -70,7 +70,7 @@
       <div class="row">
         <div class="col-md-4">
           <label>N° Acta</label>
-          <input type="text" id="acta" class="form-control" readonly>
+<input type="text" id="acta" class="form-control" placeholder="Ej: 2026-015">
         </div>
         <div class="col-md-4">
           <label>Fecha</label>
@@ -176,15 +176,7 @@
       navigator.serviceWorker.register('sw.js');
     }
 
-    // NUMERACIÓN ANUAL
-    let año = new Date().getFullYear();
-    let contador = localStorage.getItem("acta_" + año);
-    if (!contador) { contador = 1; }
-    function actualizarNumero() {
-      document.getElementById("acta").value =
-        año + "-" + String(contador).padStart(3, '0');
-    }
-    actualizarNumero();
+
 
     // FIRMA
     // FIRMA RESPONSABLE (compatible mouse + celular)
@@ -253,6 +245,7 @@
       const COSTO_LITRO = 1900;
 
 
+
       let acta = document.getElementById("acta").value;
       let fecha = document.getElementById("fecha").value;
       let tipo = document.getElementById("tipo").value;
@@ -264,6 +257,12 @@
       let personal = parseInt(document.getElementById("personal").value) || 0;
       let combustible = parseFloat(document.getElementById("combustible").value) || 0;
       let descripcion = document.getElementById("descripcion").value;
+
+
+      if (!acta) {
+  alert("Debe ingresar el número de acta.");
+  return;
+}
 
       // Cálculos
       let horas = 0;
@@ -350,8 +349,6 @@
         doc.save("Acta_" + acta + ".pdf");
 
         contador++;
-        localStorage.setItem("acta_" + año, contador);
-        actualizarNumero();
       }
     }
 
