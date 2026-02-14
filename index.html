@@ -42,15 +42,16 @@
       background: #b30000;
       color: white;
     }
+
     .card {
-    border-radius:15px;
-    background-color:#e9edf2;  /* gris suave */
-}
-canvas {
-    touch-action: none;
-}
+      border-radius: 15px;
+      background-color: #e9edf2;
+      /* gris suave */
+    }
 
-
+    canvas {
+      touch-action: none;
+    }
   </style>
 </head>
 
@@ -183,61 +184,61 @@ canvas {
     actualizarNumero();
 
     // FIRMA
-// FIRMA RESPONSABLE (compatible mouse + celular)
+    // FIRMA RESPONSABLE (compatible mouse + celular)
 
-let canvas = document.getElementById("firma");
-let ctx = canvas.getContext("2d");
+    let canvas = document.getElementById("firma");
+    let ctx = canvas.getContext("2d");
 
-canvas.width = canvas.offsetWidth;
-canvas.height = 150;
+    canvas.width = canvas.offsetWidth;
+    canvas.height = 150;
 
-let dibujando = false;
+    let dibujando = false;
 
-function obtenerPosicion(e) {
-    const rect = canvas.getBoundingClientRect();
-    return {
+    function obtenerPosicion(e) {
+      const rect = canvas.getBoundingClientRect();
+      return {
         x: (e.touches ? e.touches[0].clientX : e.clientX) - rect.left,
         y: (e.touches ? e.touches[0].clientY : e.clientY) - rect.top
-    };
-}
+      };
+    }
 
-function iniciarDibujo(e) {
-    dibujando = true;
-    const pos = obtenerPosicion(e);
-    ctx.moveTo(pos.x, pos.y);
-}
+    function iniciarDibujo(e) {
+      dibujando = true;
+      const pos = obtenerPosicion(e);
+      ctx.moveTo(pos.x, pos.y);
+    }
 
-function dibujar(e) {
-    if (!dibujando) return;
-    e.preventDefault(); // evita scroll en celular
-    const pos = obtenerPosicion(e);
-    ctx.lineWidth = 2;
-    ctx.lineCap = "round";
-    ctx.lineTo(pos.x, pos.y);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
-}
+    function dibujar(e) {
+      if (!dibujando) return;
+      e.preventDefault(); // evita scroll en celular
+      const pos = obtenerPosicion(e);
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+    }
 
-function detenerDibujo() {
-    dibujando = false;
-    ctx.beginPath();
-}
+    function detenerDibujo() {
+      dibujando = false;
+      ctx.beginPath();
+    }
 
-// Eventos mouse
-canvas.addEventListener("mousedown", iniciarDibujo);
-canvas.addEventListener("mousemove", dibujar);
-canvas.addEventListener("mouseup", detenerDibujo);
-canvas.addEventListener("mouseleave", detenerDibujo);
+    // Eventos mouse
+    canvas.addEventListener("mousedown", iniciarDibujo);
+    canvas.addEventListener("mousemove", dibujar);
+    canvas.addEventListener("mouseup", detenerDibujo);
+    canvas.addEventListener("mouseleave", detenerDibujo);
 
-// Eventos táctiles (celular)
-canvas.addEventListener("touchstart", iniciarDibujo);
-canvas.addEventListener("touchmove", dibujar);
-canvas.addEventListener("touchend", detenerDibujo);
+    // Eventos táctiles (celular)
+    canvas.addEventListener("touchstart", iniciarDibujo);
+    canvas.addEventListener("touchmove", dibujar);
+    canvas.addEventListener("touchend", detenerDibujo);
 
-function limpiarFirma() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
+    function limpiarFirma() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
 
 
     // GENERAR PDF
@@ -268,7 +269,6 @@ function limpiarFirma() {
         let f = new Date("1970-01-01T" + regreso);
         horas = (f - i) / 1000 / 60 / 60;
       }
-      let horasHombre = horas * personal;
       let costoComb = combustible * COSTO_LITRO;
       let huboComida = document.getElementById("huboComida").checked;
       let costoComida = 0;
@@ -309,7 +309,7 @@ function limpiarFirma() {
         y += 15;
         doc.text("Horario: " + salida + " a " + regreso + " hs. Total: " + horas.toFixed(2) + " horas.", 20, y);
         y += 15;
-    
+
 
         doc.setFontSize(11);
         doc.text("DESCRIPCIÓN DEL SERVICIO:", 20, y);
@@ -322,7 +322,7 @@ function limpiarFirma() {
 
         y += descripcionSplit.length * 6;
 
-        doc.text("Personal: " + personal + " efectivos." +  20, y);
+        doc.text("Personal afectado: " + personal + " efectivos.", 20, y);
         y += 15;
         doc.text("Combustible: " + combustible + " L.", 20, y);
         y += 10;
