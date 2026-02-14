@@ -342,8 +342,8 @@
         doc.setFontSize(12);
         doc.text("COSTO OPERATIVO TOTAL: $" + costoTotal.toFixed(2), 20, y);
 
-        // --- BLOQUE INSTITUCIONAL FINAL ---
-
+    
+// --- BLOQUE INSTITUCIONAL FINAL ---
 y += 20;
 
 doc.setFontSize(9);
@@ -367,9 +367,7 @@ doc.text(
 
 y += 10;
 
-// Agregar QR
-// --- QR INSTITUCIONAL ---
-
+// --- CARGAR QR Y GUARDAR PDF ---
 const qr = new Image();
 qr.src = "./qr.png";
 
@@ -386,34 +384,16 @@ qr.onload = function () {
   doc.addImage(qrBase64, "PNG", 150, y, 40, 40);
 
   doc.setFontSize(10);
+  doc.setTextColor(0);
   doc.text("Alias: bomberos.dorrego", 20, y + 20);
 
   doc.save("Acta_" + acta + ".pdf");
 };
 
-
-qrImg.onerror = function () {
-  finalizar();
-};
-
-function finalizar() {
+qr.onerror = function () {
   doc.save("Acta_" + acta + ".pdf");
-
-  contador++;
-  localStorage.setItem("acta_" + año, contador);
-  actualizarNumero();
-}
-
-
-        let firmaImg = canvas.toDataURL("image/png");
-        doc.addImage(firmaImg, "PNG", 120, 250, 60, 25);
-        doc.text("Firma Responsable", 120, 280);
-
-        doc.save("Acta_" + acta + ".pdf");
-
-        contador++;
-      }
-    }
+};
+      }}
 
     function toggleComida() {
       const check = document.getElementById("huboComida").checked;
