@@ -44,7 +44,7 @@
       color: white;
     }
 
-        .btn-rojo:hover {
+    .btn-rojo:hover {
       background: #ff0000;
       color: white;
     }
@@ -88,6 +88,8 @@
           <select id="tipo" class="form-select">
             <option>Incendio Forestal</option>
             <option>Incendio Vehicular</option>
+            <option>Incendio Maquinaria</option>
+            <option>Incendio Estructura</option>
           </select>
         </div>
       </div>
@@ -402,38 +404,38 @@
 
           y += 30;
 
-         let firmaImg = canvas.toDataURL("image/png");
+          let firmaImg = canvas.toDataURL("image/png");
 
-// Crear imagen para obtener dimensiones originales
-let img = new Image();
-img.src = firmaImg;
-img.onload = function () {
-  let maxWidth = 60;  // ancho máximo en mm
-  let maxHeight = 25; // alto máximo en mm
+          // Crear imagen para obtener dimensiones originales
+          let img = new Image();
+          img.src = firmaImg;
+          img.onload = function () {
+            let maxWidth = 60;  // ancho máximo en mm
+            let maxHeight = 25; // alto máximo en mm
 
-  // Calcular proporción
-  let ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
+            // Calcular proporción
+            let ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
 
-  let imgWidth = img.width * ratio;
-  let imgHeight = img.height * ratio;
+            let imgWidth = img.width * ratio;
+            let imgHeight = img.height * ratio;
 
-  // Centrar horizontalmente
-  let x = (doc.internal.pageSize.getWidth() - imgWidth) / 2;
+            // Centrar horizontalmente
+            let x = (doc.internal.pageSize.getWidth() - imgWidth) / 2;
 
-  y += 30;
+            y += 30;
 
-  const canvasVacio = document.createElement("canvas");
-  canvasVacio.width = canvas.width;
-  canvasVacio.height = canvas.height;
+            const canvasVacio = document.createElement("canvas");
+            canvasVacio.width = canvas.width;
+            canvasVacio.height = canvas.height;
 
-  if (firmaImg !== canvasVacio.toDataURL()) {
-    doc.addImage(firmaImg, "PNG", x, y, imgWidth, imgHeight);
-    doc.line(x, y + imgHeight + 3, x + imgWidth, y + imgHeight + 3);
-    doc.text("Firma Responsable", doc.internal.pageSize.getWidth() / 2, y + imgHeight + 10, null, null, "center");
-  }
+            if (firmaImg !== canvasVacio.toDataURL()) {
+              doc.addImage(firmaImg, "PNG", x, y, imgWidth, imgHeight);
+              doc.line(x, y + imgHeight + 3, x + imgWidth, y + imgHeight + 3);
+              doc.text("Firma Responsable", doc.internal.pageSize.getWidth() / 2, y + imgHeight + 10, null, null, "center");
+            }
 
-  doc.save("Acta_" + acta + ".pdf");
-};
+            doc.save("Acta_" + acta + ".pdf");
+          };
 
         }
       }
