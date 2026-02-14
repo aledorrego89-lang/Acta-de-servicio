@@ -1,281 +1,325 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Bomberos Coronel Dorrego - Actas</title>
+  <title>Bomberos Coronel Dorrego - Actas</title>
 
-<link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="manifest.json">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-<style>
-body{background:#f4f6f9;}
-.navbar{background:#b30000;}
-.navbar-brand{color:white !important;font-weight:bold;}
-.card{border-radius:15px;}
-canvas{border:1px solid #ccc;border-radius:10px;width:100%;height:150px;}
-.btn-rojo{background:#b30000;color:white;}
-</style>
+  <style>
+    body {
+      background: #2d2e2e;
+    }
+
+    .navbar {
+      background: #b30000;
+    }
+
+    .navbar-brand {
+      color: white !important;
+      font-weight: bold;
+    }
+
+    .card {
+      border-radius: 15px;
+    }
+
+    canvas {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      width: 100%;
+      height: 150px;
+    }
+
+    .btn-rojo {
+      background: #b30000;
+      color: white;
+    }
+    .card {
+    border-radius:15px;
+    background-color:#e9edf2;  /* gris suave */
+}
+
+  </style>
 </head>
 
 <body>
 
-<nav class="navbar navbar-dark">
-<div class="container-fluid">
-<span class="navbar-brand">🚒 Bomberos Voluntarios de Coronel Dorrego</span>
-</div>
-</nav>
+  <nav class="navbar navbar-dark">
+    <div class="container-fluid">
+      <span class="navbar-brand">🚒 Bomberos Voluntarios de Coronel Dorrego</span>
+    </div>
+  </nav>
 
-<div class="container my-4">
+  <div class="container my-4">
 
-<div class="card shadow p-4 mb-4">
-<h5>Datos del Servicio</h5>
-<div class="row">
-<div class="col-md-4">
-<label>N° Acta</label>
-<input type="text" id="acta" class="form-control" readonly>
-</div>
-<div class="col-md-4">
-<label>Fecha</label>
-<input type="date" id="fecha" class="form-control">
-</div>
-<div class="col-md-4">
-<label>Tipo</label>
-<select id="tipo" class="form-select">
-<option>Incendio Forestal</option>
-<option>Incendio Vehicular</option>
-</select>
-</div>
-</div>
+    <div class="card shadow p-4 mb-4">
+      <h5>Datos del Servicio</h5>
+      <div class="row">
+        <div class="col-md-4">
+          <label>N° Acta</label>
+          <input type="text" id="acta" class="form-control" readonly>
+        </div>
+        <div class="col-md-4">
+          <label>Fecha</label>
+          <input type="date" id="fecha" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label>Tipo</label>
+          <select id="tipo" class="form-select">
+            <option>Incendio Forestal</option>
+            <option>Incendio Vehicular</option>
+          </select>
+        </div>
+      </div>
 
-<div class="mt-3">
-<label>Lugar</label>
-<input type="text" id="lugar" class="form-control">
-</div>
-</div>
-
-<div class="card shadow p-4 mb-4">
-<h5>Propietario</h5>
-<div class="row">
-<div class="col-md-6">
-<input type="text" id="propietario" class="form-control" placeholder="Nombre">
-</div>
-<div class="col-md-6">
-<input type="text" id="dni" class="form-control" placeholder="DNI">
-</div>
-</div>
-</div>
-
-<div class="card shadow p-4 mb-4">
-<h5>Datos Operativos</h5>
-<div class="row">
-<div class="col-md-3">
-<label>Salida</label>
-<input type="time" id="salida" class="form-control">
-</div>
-<div class="col-md-3">
-<label>Regreso</label>
-<input type="time" id="regreso" class="form-control">
-</div>
-<div class="col-md-3">
-<label>Personal</label>
-<input type="number" id="personal" class="form-control">
-</div>
-<div class="col-md-3">
-<label>Combustible (L)</label>
-<input type="number" id="combustible" class="form-control">
-</div>
-</div>
-
-<div class="card shadow-sm mt-3">
-  <div class="card-header bg-light">
-    <strong>Alimentación del Personal</strong>
-  </div>
-  <div class="card-body">
-
-    <div class="form-check mb-3">
-      <input class="form-check-input" type="checkbox" id="huboComida" onchange="toggleComida()">
-      <label class="form-check-label">
-        Se brindó comida durante el servicio
-      </label>
+      <div class="mt-3">
+        <label>Lugar</label>
+        <input type="text" id="lugar" class="form-control">
+      </div>
     </div>
 
-    <div id="datosComida" style="display:none;">
-      <label class="form-label">Costo total de alimentación ($)</label>
-      <input type="number" class="form-control" id="costoComidaInput" value="0">
+    <div class="card shadow p-4 mb-4">
+      <h5>Propietario</h5>
+      <div class="row">
+        <div class="col-md-6">
+          <input type="text" id="propietario" class="form-control" placeholder="Nombre">
+        </div>
+        <div class="col-md-6">
+          <input type="text" id="dni" class="form-control" placeholder="DNI">
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow p-4 mb-4">
+      <h5>Datos Operativos</h5>
+      <div class="row">
+        <div class="col-md-3">
+          <label>Salida</label>
+          <input type="time" id="salida" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label>Regreso</label>
+          <input type="time" id="regreso" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label>Personal</label>
+          <input type="number" id="personal" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label>Combustible (L)</label>
+          <input type="number" id="combustible" class="form-control">
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <textarea id="descripcion" class="form-control" rows="4" placeholder="Descripción"></textarea>
+      </div>
+    </div>
+
+    <div class="card shadow-sm mt-3">
+      <div class="card-header bg-light">
+        <strong>Alimentación del Personal</strong>
+      </div>
+      <div class="card-body">
+
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="huboComida" onchange="toggleComida()">
+          <label class="form-check-label">
+            Se brindó comida durante el servicio
+          </label>
+        </div>
+
+        <div id="datosComida" style="display:none;">
+          <label class="form-label">Costo total de alimentación ($)</label>
+          <input type="number" class="form-control" id="costoComidaInput" value="0">
+        </div>
+
+      </div>
+    </div>
+
+
+
+
+
+    <div class="card shadow p-4 mt-4">
+      <h5>Firma Responsable</h5>
+      <canvas id="firma"></canvas>
+      <button class="btn btn-secondary mt-2" onclick="limpiarFirma()">Limpiar Firma</button>
+    </div>
+
+    <div class="text-center mt-5">
+      <button class="btn btn-rojo btn-lg" onclick="generarPDF()">Generar PDF</button>
     </div>
 
   </div>
-</div>
+
+  <script>
+
+    // REGISTRO SERVICE WORKER
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+
+    // NUMERACIÓN ANUAL
+    let año = new Date().getFullYear();
+    let contador = localStorage.getItem("acta_" + año);
+    if (!contador) { contador = 1; }
+    function actualizarNumero() {
+      document.getElementById("acta").value =
+        año + "-" + String(contador).padStart(3, '0');
+    }
+    actualizarNumero();
+
+    // FIRMA
+    let canvas = document.getElementById("firma");
+    let ctx = canvas.getContext("2d");
+    canvas.width = canvas.offsetWidth;
+    canvas.height = 150;
+    let dibujando = false;
+    canvas.addEventListener("mousedown", () => dibujando = true);
+    canvas.addEventListener("mouseup", () => { dibujando = false; ctx.beginPath(); });
+    canvas.addEventListener("mousemove", e => {
+      if (!dibujando) return;
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.lineTo(e.offsetX, e.offsetY);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(e.offsetX, e.offsetY);
+    });
+    function limpiarFirma() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+
+    // GENERAR PDF
+    async function generarPDF() {
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF("p", "mm", "a4");
+
+      const COSTO_LITRO = 1900;
 
 
+      let acta = document.getElementById("acta").value;
+      let fecha = document.getElementById("fecha").value;
+      let tipo = document.getElementById("tipo").value;
+      let lugar = document.getElementById("lugar").value;
+      let propietario = document.getElementById("propietario").value;
+      let dni = document.getElementById("dni").value;
+      let salida = document.getElementById("salida").value;
+      let regreso = document.getElementById("regreso").value;
+      let personal = parseInt(document.getElementById("personal").value) || 0;
+      let combustible = parseFloat(document.getElementById("combustible").value) || 0;
+      let descripcion = document.getElementById("descripcion").value;
 
-<div class="mt-3">
-<textarea id="descripcion" class="form-control" rows="4" placeholder="Descripción"></textarea>
-</div>
-</div>
+      // Cálculos
+      let horas = 0;
+      if (salida && regreso) {
+        let i = new Date("1970-01-01T" + salida);
+        let f = new Date("1970-01-01T" + regreso);
+        horas = (f - i) / 1000 / 60 / 60;
+      }
+      let horasHombre = horas * personal;
+      let costoComb = combustible * COSTO_LITRO;
+      let huboComida = document.getElementById("huboComida").checked;
+      let costoComida = 0;
 
-<div class="card shadow p-4 mb-4">
-<h5>Firma Responsable</h5>
-<canvas id="firma"></canvas>
-<button class="btn btn-secondary mt-2" onclick="limpiarFirma()">Limpiar Firma</button>
-</div>
+      if (huboComida) {
+        costoComida = parseFloat(document.getElementById("costoComidaInput").value) || 0;
+      }
 
-<div class="text-center mb-5">
-<button class="btn btn-rojo btn-lg" onclick="generarPDF()">Generar PDF</button>
-</div>
+      let costoTotal = costoComb + costoComida;
 
-</div>
+      // Logo
+      let logo = new Image();
+      logo.src = "logo.png";
+      logo.onload = function () {
+        doc.addImage(logo, "PNG", 20, 10, 25, 25);
+        contenido();
+      };
+      logo.onerror = function () { contenido(); };
 
-<script>
+      function contenido() {
 
-// REGISTRO SERVICE WORKER
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
-}
+        doc.setFontSize(14);
+        doc.text("BOMBEROS VOLUNTARIOS DE CORONEL DORREGO", 105, 15, null, null, "center");
+        doc.setFontSize(10);
+        doc.text("Italia 535 - Coronel Dorrego", 105, 21, null, null, "center");
+        doc.text("Tel: 2921 452313", 105, 26, null, null, "center");
+        doc.line(20, 35, 190, 35);
 
-// NUMERACIÓN ANUAL
-let año = new Date().getFullYear();
-let contador = localStorage.getItem("acta_"+año);
-if(!contador){contador=1;}
-function actualizarNumero(){
-document.getElementById("acta").value =
-año+"-"+String(contador).padStart(3,'0');
-}
-actualizarNumero();
+        doc.setFontSize(12);
+        doc.text("ACTA DE INTERVENCIÓN N° " + acta, 105, 43, null, null, "center");
 
-// FIRMA
-let canvas=document.getElementById("firma");
-let ctx=canvas.getContext("2d");
-canvas.width=canvas.offsetWidth;
-canvas.height=150;
-let dibujando=false;
-canvas.addEventListener("mousedown",()=>dibujando=true);
-canvas.addEventListener("mouseup",()=>{dibujando=false;ctx.beginPath();});
-canvas.addEventListener("mousemove",e=>{
-if(!dibujando)return;
-ctx.lineWidth=2;
-ctx.lineCap="round";
-ctx.lineTo(e.offsetX,e.offsetY);
-ctx.stroke();
-ctx.beginPath();
-ctx.moveTo(e.offsetX,e.offsetY);
-});
-function limpiarFirma(){ctx.clearRect(0,0,canvas.width,canvas.height);}
+        let y = 55;
+        doc.setFontSize(11);
 
-// GENERAR PDF
-async function generarPDF(){
+        doc.text("En fecha " + fecha + " se intervino en '" + tipo + "' en " + lugar + ".", 20, y, { maxWidth: 170 });
+        y += 15;
+        doc.text("Propietario: " + propietario + " - DNI: " + dni + ".", 20, y);
+        y += 15;
+        doc.text("Horario: " + salida + " a " + regreso + " hs. Total: " + horas.toFixed(2) + " horas.", 20, y);
+        y += 15;
+        y += 15;
 
-const { jsPDF } = window.jspdf;
-const doc=new jsPDF("p","mm","a4");
+        doc.setFontSize(11);
+        doc.text("DESCRIPCIÓN DEL SERVICIO:", 20, y);
+        y += 8;
 
-const COSTO_LITRO=1900;
+        doc.setFontSize(10);
 
+        let descripcionSplit = doc.splitTextToSize(descripcion, 170);
+        doc.text(descripcionSplit, 20, y);
 
-let acta=document.getElementById("acta").value;
-let fecha=document.getElementById("fecha").value;
-let tipo=document.getElementById("tipo").value;
-let lugar=document.getElementById("lugar").value;
-let propietario=document.getElementById("propietario").value;
-let dni=document.getElementById("dni").value;
-let salida=document.getElementById("salida").value;
-let regreso=document.getElementById("regreso").value;
-let personal=parseInt(document.getElementById("personal").value)||0;
-let combustible=parseFloat(document.getElementById("combustible").value)||0;
-let descripcion=document.getElementById("descripcion").value;
+        y += descripcionSplit.length * 6;
 
-// Cálculos
-let horas=0;
-if(salida&&regreso){
-let i=new Date("1970-01-01T"+salida);
-let f=new Date("1970-01-01T"+regreso);
-horas=(f-i)/1000/60/60;
-}
-let horasHombre=horas*personal;
-let costoComb=combustible*COSTO_LITRO;
-let huboComida=document.getElementById("huboComida").checked;
-let costoComida=0;
+        doc.text("Personal: " + personal + " efectivos." +  20, y);
+        y += 15;
+        doc.text("Combustible: " + combustible + " L.", 20, y);
+        y += 10;
+        doc.text("Costo combustible estimado: $" + costoComb.toFixed(2), 20, y);
 
-if(huboComida){
-    costoComida=parseFloat(document.getElementById("costoComidaInput").value)||0;
-}
+        if (huboComida) {
 
-let costoTotal=costoComb+costoComida;
+          y += 10;
+          doc.text("Servicio de alimentación brindado.", 20, y);
+          y += 10;
+          doc.text("Costo alimentación estimado: $" + costoComida.toFixed(2), 20, y);
+        }
 
-// Logo
-let logo=new Image();
-logo.src="logo.png";
-logo.onload=function(){
-doc.addImage(logo,"PNG",20,10,25,25);
-contenido();
-};
-logo.onerror=function(){contenido();};
+        y += 15;
+        doc.setFontSize(12);
+        doc.text("COSTO OPERATIVO TOTAL: $" + costoTotal.toFixed(2), 20, y);
 
-function contenido(){
+        let firmaImg = canvas.toDataURL("image/png");
+        doc.addImage(firmaImg, "PNG", 120, 250, 60, 25);
+        doc.text("Firma Responsable", 120, 280);
 
-doc.setFontSize(14);
-doc.text("BOMBEROS VOLUNTARIOS DE CORONEL DORREGO",105,15,null,null,"center");
-doc.setFontSize(10);
-doc.text("Italia 535 - Coronel Dorrego",105,21,null,null,"center");
-doc.text("Tel: 2921 452313",105,26,null,null,"center");
-doc.line(20,35,190,35);
+        doc.save("Acta_" + acta + ".pdf");
 
-doc.setFontSize(12);
-doc.text("ACTA DE INTERVENCIÓN N° "+acta,105,43,null,null,"center");
+        contador++;
+        localStorage.setItem("acta_" + año, contador);
+        actualizarNumero();
+      }
+    }
 
-let y=55;
-doc.setFontSize(11);
-
-doc.text("En fecha "+fecha+" se intervino en '"+tipo+"' en "+lugar+".",20,y,{maxWidth:170});
-y+=15;
-doc.text("Propietario: "+propietario+" - DNI: "+dni+".",20,y);
-y+=15;
-doc.text("Horario: "+salida+" a "+regreso+" hs. Total: "+horas.toFixed(2)+" horas.",20,y);
-y+=15;
-doc.text("Personal: "+personal+" efectivos. Horas hombre: "+horasHombre.toFixed(2),20,y);
-y+=15;
-doc.text("Combustible: "+combustible+" L.",20,y);
-y+=10;
-doc.text("Costo combustible estimado: $"+costoComb.toFixed(2),20,y);
-
-if(huboComida){
-
-y+=10;
-doc.text("Servicio de alimentación brindado.",20,y);
-y+=10;
-doc.text("Costo alimentación estimado: $"+costoComida.toFixed(2),20,y);
-}
-
-y+=15;
-doc.setFontSize(12);
-doc.text("COSTO OPERATIVO TOTAL: $"+costoTotal.toFixed(2),20,y);
-
-let firmaImg=canvas.toDataURL("image/png");
-doc.addImage(firmaImg,"PNG",120,250,60,25);
-doc.text("Firma Responsable",120,280);
-
-doc.save("Acta_"+acta+".pdf");
-
-contador++;
-localStorage.setItem("acta_"+año,contador);
-actualizarNumero();
-}
-}
-
-function toggleComida() {
-    const check = document.getElementById("huboComida").checked;
-    document.getElementById("datosComida").style.display = check ? "block" : "none";
-}
+    function toggleComida() {
+      const check = document.getElementById("huboComida").checked;
+      document.getElementById("datosComida").style.display = check ? "block" : "none";
+    }
 
 
 
 
 
-</script>
+  </script>
 
 </body>
+
 </html>
