@@ -122,7 +122,7 @@
           <input type="number" id="personal" class="form-control">
         </div>
         <div class="col-md-3">
-          <label>Combustible (L)</label>
+          <label>Combustible (Lts)</label>
           <input type="number" id="combustible" class="form-control">
         </div>
       </div>
@@ -326,7 +326,7 @@
 
         doc.text("Personal afectado: " + personal + " efectivos.", 20, y);
         y += 15;
-        doc.text("Combustible: " + combustible + " L.", 20, y);
+        doc.text("Combustible: " + combustible + " Lts.", 20, y);
         y += 10;
         doc.text("Costo combustible estimado: $" + costoComb.toFixed(2), 20, y);
 
@@ -393,7 +393,7 @@ qr.onload = function () {
   // FIRMA CENTRADA ABAJO
   // ===============================
 
-  y += 50;
+  y += 30;
 
   let firmaImg = canvas.toDataURL("image/png");
 
