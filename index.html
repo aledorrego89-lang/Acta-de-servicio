@@ -342,6 +342,58 @@
         doc.setFontSize(12);
         doc.text("COSTO OPERATIVO TOTAL: $" + costoTotal.toFixed(2), 20, y);
 
+        // --- BLOQUE INSTITUCIONAL FINAL ---
+
+y += 20;
+
+doc.setFontSize(9);
+doc.setTextColor(80);
+
+doc.text(
+  "Dichos gastos son afrontados por fondos propios de la institución, recaudados mediante rifas y eventos realizados.",
+  20,
+  y,
+  { maxWidth: 170 }
+);
+
+y += 8;
+
+doc.text(
+  "Si desea colaborar puede hacerlo al alias institucional o mediante el siguiente código QR:",
+  20,
+  y,
+  { maxWidth: 170 }
+);
+
+y += 10;
+
+// Agregar QR
+let qrImg = new Image();
+qrImg.src = "qr.png";
+
+qrImg.onload = function () {
+  doc.addImage(qrImg, "PNG", 150, y - 5, 40, 40);
+
+  doc.setFontSize(10);
+  doc.setTextColor(0);
+  doc.text("Alias: bomberos.cd", 20, y + 20);
+
+  finalizar();
+};
+
+qrImg.onerror = function () {
+  finalizar();
+};
+
+function finalizar() {
+  doc.save("Acta_" + acta + ".pdf");
+
+  contador++;
+  localStorage.setItem("acta_" + año, contador);
+  actualizarNumero();
+}
+
+
         let firmaImg = canvas.toDataURL("image/png");
         doc.addImage(firmaImg, "PNG", 120, 250, 60, 25);
         doc.text("Firma Responsable", 120, 280);
