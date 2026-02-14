@@ -396,25 +396,40 @@
 
           y += 30;
 
-          let firmaImg = canvas.toDataURL("image/png");
+         let firmaImg = canvas.toDataURL("image/png");
 
-          const canvasVacio = document.createElement("canvas");
-          canvasVacio.width = canvas.width;
-          canvasVacio.height = canvas.height;
+// Crear imagen para obtener dimensiones originales
+let img = new Image();
+img.src = firmaImg;
+img.onload = function () {
+  let maxWidth = 60;  // ancho máximo en mm
+  let maxHeight = 25; // alto máximo en mm
 
-          if (firmaImg !== canvasVacio.toDataURL()) {
-            doc.addImage(firmaImg, "PNG", 75, y, 60, 25);
-            doc.line(60, y + 28, 150, y + 28);
-            doc.text("Firma Responsable", 105, y + 35, null, null, "center");
-          }
+  // Calcular proporción
+  let ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
 
-          doc.save("Acta_" + acta + ".pdf");
-        };
+  let imgWidth = img.width * ratio;
+  let imgHeight = img.height * ratio;
 
-        qr.onerror = function () {
-          doc.save("Acta_" + acta + ".pdf");
-        };
+  // Centrar horizontalmente
+  let x = (doc.internal.pageSize.getWidth() - imgWidth) / 2;
 
+  y += 30;
+
+  const canvasVacio = document.createElement("canvas");
+  canvasVacio.width = canvas.width;
+  canvasVacio.height = canvas.height;
+
+  if (firmaImg !== canvasVacio.toDataURL()) {
+    doc.addImage(firmaImg, "PNG", x, y, imgWidth, imgHeight);
+    doc.line(x, y + imgHeight + 3, x + imgWidth, y + imgHeight + 3);
+    doc.text("Firma Responsable", doc.internal.pageSize.getWidth() / 2, y + imgHeight + 10, null, null, "center");
+  }
+
+  doc.save("Acta_" + acta + ".pdf");
+};
+
+        }
       }
     }
 
