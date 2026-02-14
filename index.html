@@ -343,35 +343,34 @@
         doc.text("COSTO OPERATIVO TOTAL: $" + costoTotal.toFixed(2), 20, y);
 
     
-// --- BLOQUE INSTITUCIONAL FINAL ---
+// ===============================
+// BLOQUE INSTITUCIONAL ORDENADO
+// ===============================
+
 y += 20;
 
 doc.setFontSize(9);
 doc.setTextColor(80);
 
-doc.text(
-  "Dichos gastos son afrontados por fondos propios de la institución, recaudados mediante rifas y eventos realizados.",
-  20,
-  y,
-  { maxWidth: 170 }
+let textoInstitucional = doc.splitTextToSize(
+  "Dichos gastos son afrontados por fondos propios de la institución, recaudados mediante rifas y eventos realizados. Si desea colaborar puede hacerlo al alias institucional o mediante el siguiente código QR.",
+  170
 );
 
-y += 8;
+doc.text(textoInstitucional, 20, y);
 
-doc.text(
-  "Si desea colaborar puede hacerlo al alias institucional o mediante el siguiente código QR:",
-  20,
-  y,
-  { maxWidth: 170 }
-);
+y += textoInstitucional.length * 5 + 10;
 
-y += 10;
 
-// --- CARGAR QR Y GUARDAR PDF ---
+// ===============================
+// QR + ALIAS ALINEADOS
+// ===============================
+
 const qr = new Image();
 qr.src = "./qr.png";
 
 qr.onload = function () {
+
   const canvasQR = document.createElement("canvas");
   canvasQR.width = qr.width;
   canvasQR.height = qr.height;
@@ -381,11 +380,32 @@ qr.onload = function () {
 
   const qrBase64 = canvasQR.toDataURL("image/png");
 
-  doc.addImage(qrBase64, "PNG", 150, y, 40, 40);
+  // QR más chico y mejor ubicado
+  doc.addImage(qrBase64, "PNG", 140, y, 35, 35);
 
-  doc.setFontSize(10);
+  // Alias alineado con el QR
+  doc.setFontSize(11);
   doc.setTextColor(0);
-  doc.text("Alias: bomberos.dorrego", 20, y + 20);
+  doc.text("Alias: bomberos.dorrego", 20, y + 18);
+
+
+  // ===============================
+  // FIRMA CENTRADA ABAJO
+  // ===============================
+
+  y += 50;
+
+  let firmaImg = canvas.toDataURL("image/png");
+
+  const canvasVacio = document.createElement("canvas");
+  canvasVacio.width = canvas.width;
+  canvasVacio.height = canvas.height;
+
+  if (firmaImg !== canvasVacio.toDataURL()) {
+    doc.addImage(firmaImg, "PNG", 75, y, 60, 25);
+    doc.line(60, y + 28, 150, y + 28);
+    doc.text("Firma Responsable", 105, y + 35, null, null, "center");
+  }
 
   doc.save("Acta_" + acta + ".pdf");
 };
@@ -393,6 +413,7 @@ qr.onload = function () {
 qr.onerror = function () {
   doc.save("Acta_" + acta + ".pdf");
 };
+
       }}
 
     function toggleComida() {
