@@ -368,18 +368,29 @@ doc.text(
 y += 10;
 
 // Agregar QR
-let qrImg = new Image();
-qrImg.src = "qr.png";
+// --- QR INSTITUCIONAL ---
 
-qrImg.onload = function () {
-  doc.addImage(qrImg, "PNG", 150, y - 5, 40, 40);
+const qr = new Image();
+qr.src = "./qr.png";
+
+qr.onload = function () {
+  const canvasQR = document.createElement("canvas");
+  canvasQR.width = qr.width;
+  canvasQR.height = qr.height;
+
+  const ctxQR = canvasQR.getContext("2d");
+  ctxQR.drawImage(qr, 0, 0);
+
+  const qrBase64 = canvasQR.toDataURL("image/png");
+
+  doc.addImage(qrBase64, "PNG", 150, y, 40, 40);
 
   doc.setFontSize(10);
-  doc.setTextColor(0);
-  doc.text("Alias: bomberos.cd", 20, y + 20);
+  doc.text("Alias: bomberos.dorrego", 20, y + 20);
 
-  finalizar();
+  doc.save("Acta_" + acta + ".pdf");
 };
+
 
 qrImg.onerror = function () {
   finalizar();
