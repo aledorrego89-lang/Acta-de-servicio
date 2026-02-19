@@ -101,7 +101,7 @@
     </div>
 
     <div class="card shadow p-4 mb-4">
-      <h5>Propietario</h5>
+      <h5>Propietario / Encargado</h5>
       <div class="row">
         <div class="col-md-6">
           <label for="propietario" class="form-label">Nombre</label>
@@ -141,6 +141,17 @@
       </div>
     </div>
 
+
+        <div class="card shadow-sm mt-3">
+      <div class="card-header bg-light">
+        <strong>Superficie Afectada</strong>
+      </div>
+      <div class="card-body">
+        <label class="form-label">Cantidad aproximada de hectáreas quemadas</label>
+        <input type="number" class="form-control" id="hectareas" placeholder="Ej: 15">
+      </div>
+    </div>
+
     <div class="card shadow-sm mt-3">
       <div class="card-header bg-light">
         <strong>Alimentación del Personal</strong>
@@ -165,6 +176,36 @@
 
 
 
+    <!-- roturas -->
+    <div class="card shadow-sm mt-3">
+      <div class="card-header bg-light">
+        <strong>Roturas de Vehículos / Equipos</strong>
+      </div>
+      <div class="card-body">
+
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="huboRoturas" onchange="toggleRoturas()">
+          <label class="form-check-label">
+            Hubo roturas durante el servicio
+          </label>
+        </div>
+
+<div id="datosRoturas" style="display:none;">
+  <label class="form-label">Descripción de la rotura</label>
+  <textarea class="form-control mb-2" id="descripcionRotura" rows="3"
+    placeholder="Ej: Rotura de manguera de alta presión en móvil 2"></textarea>
+
+  <label class="form-label">Costo estimado de reparación ($)</label>
+  <input type="number" class="form-control" id="costoRoturasInput" value="0">
+</div>
+
+
+      </div>
+    </div>
+
+
+
+    <!-- roturas -->
 
     <div class="card shadow p-4 mt-4">
       <h5>Firma Responsable</h5>
@@ -280,15 +321,38 @@
         let f = new Date("1970-01-01T" + regreso);
         horas = (f - i) / 1000 / 60 / 60;
       }
-      let costoComb = combustible * COSTO_LITRO;
-      let huboComida = document.getElementById("huboComida").checked;
-      let costoComida = 0;
+let costoComb = combustible * COSTO_LITRO;
 
-      if (huboComida) {
-        costoComida = parseFloat(document.getElementById("costoComidaInput").value) || 0;
+// --- COMIDA ---
+let huboComida = document.getElementById("huboComida").checked;
+let costoComida = 0;
+
+if (huboComida) {
+  costoComida = parseFloat(document.getElementById("costoComidaInput").value) || 0;
+}
+
+// --- ROTURAS ---
+let huboRoturas = document.getElementById("huboRoturas").checked;
+let costoRoturas = 0;
+let descripcionRotura = "";
+
+if (huboRoturas) {
+  costoRoturas = parseFloat(document.getElementById("costoRoturasInput").value) || 0;
+  descripcionRotura = document.getElementById("descripcionRotura").value;
+}
+
+
+// --- HECTÁREAS ---
+let hectareas = document.getElementById("hectareas").value;
+
+// --- TOTAL ---
+let costoTotal = costoComb + costoComida + costoRoturas;
+
+     
+
+      if (huboRoturas) {
+        costoRoturas = parseFloat(document.getElementById("costoRoturasInput").value) || 0;
       }
-
-      let costoTotal = costoComb + costoComida;
 
       // Logo
       let logo = new Image();
@@ -301,6 +365,18 @@
 
       function contenido() {
 
+let y = 55;
+
+function verificarEspacio(alturaNecesaria) {
+  const altoPagina = doc.internal.pageSize.getHeight();
+
+  if (y + alturaNecesaria > altoPagina - 20) {
+    doc.addPage();
+    y = 20;
+  }
+}
+
+
         doc.setFontSize(14);
         doc.text("BOMBEROS VOLUNTARIOS DE CORONEL DORREGO", 105, 15, null, null, "center");
         doc.setFontSize(10);
@@ -311,7 +387,7 @@
         doc.setFontSize(12);
         doc.text("ACTA DE INTERVENCIÓN N° " + acta, 105, 43, null, null, "center");
 
-        let y = 55;
+
         doc.setFontSize(11);
 
         doc.text("En fecha " + fecha + " se intervino en '" + tipo + "' en " + lugar + ".", 20, y, { maxWidth: 170 });
@@ -322,17 +398,28 @@
         y += 15;
 
 
-        doc.setFontSize(11);
-        doc.text("DESCRIPCIÓN DEL SERVICIO:", 20, y);
-        y += 8;
+doc.setFontSize(11);
+doc.text("DESCRIPCIÓN DEL SERVICIO:", 20, y);
+y += 10;
+
+doc.setFontSize(10);
+
+let descripcionSplit = doc.splitTextToSize(descripcion, 170);
+doc.text(descripcionSplit, 20, y);
+
+// Calcular altura real ocupada
+let textHeight = doc.getTextDimensions(descripcionSplit).h;
+y += textHeight + 5;
+
+
+if (hectareas > 0) {
+  y += 8;
+  doc.text("Superficie afectada: " + hectareas + " hectáreas aprox.", 20, y);
+  y += 10;
+}
 
         doc.setFontSize(10);
 
-        let descripcionSplit = doc.splitTextToSize(descripcion, 170);
-        doc.text(descripcionSplit, 20, y);
-
-        y += descripcionSplit.length * 6;
-        y += 15;
         doc.text("Personal afectado: " + personal + " efectivos.", 20, y);
         y += 10;
         doc.text("Combustible: " + combustible + " Lts.", 20, y);
@@ -341,11 +428,35 @@
 
         if (huboComida) {
 
-          y += 10;
-          doc.text("Servicio de alimentación brindado.", 20, y);
+          // y += 10;
+          // doc.text("Servicio de alimentación brindado.", 20, y);
           y += 10;
           doc.text("Costo alimentación estimado: $" + costoComida.toFixed(2), 20, y);
         }
+
+if (huboRoturas) {
+
+  y += 10;
+  doc.setFontSize(11);
+  doc.text("ROTURAS REGISTRADAS:", 20, y);
+
+  y += 8;
+  doc.setFontSize(10);
+
+  // Descripción multilínea
+  if (descripcionRotura) {
+    let roturaSplit = doc.splitTextToSize(descripcionRotura, 170);
+    doc.text(roturaSplit, 20, y);
+let roturaHeight = doc.getTextDimensions(roturaSplit).h;
+y += roturaHeight + 5;
+
+  }
+
+  y += 5;
+  doc.text("Costo reparación estimado: $" + costoRoturas.toFixed(2), 20, y);
+}
+
+
 
         y += 15;
         doc.setFontSize(12);
@@ -356,7 +467,9 @@
         // BLOQUE INSTITUCIONAL ORDENADO
         // ===============================
 
-        y += 20;
+  y += 20;
+verificarEspacio(40);
+
 
         doc.setFontSize(9);
         doc.setTextColor(80);
@@ -390,7 +503,9 @@
           const qrBase64 = canvasQR.toDataURL("image/png");
 
           // QR más chico y mejor ubicado
-          doc.addImage(qrBase64, "PNG", 140, y, 35, 35);
+      verificarEspacio(45);
+doc.addImage(qrBase64, "PNG", 140, y, 35, 35);
+
 
           // Alias alineado con el QR
           doc.setFontSize(11);
@@ -401,8 +516,9 @@
           // ===============================
           // FIRMA CENTRADA ABAJO
           // ===============================
+y += 30;
+verificarEspacio(60);
 
-          y += 30;
 
           let firmaImg = canvas.toDataURL("image/png");
 
@@ -446,6 +562,10 @@
       document.getElementById("datosComida").style.display = check ? "block" : "none";
     }
 
+    function toggleRoturas() {
+      const check = document.getElementById("huboRoturas").checked;
+      document.getElementById("datosRoturas").style.display = check ? "block" : "none";
+    }
 
 
 
